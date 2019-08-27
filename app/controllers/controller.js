@@ -1,0 +1,149 @@
+var mongoose = require('mongoose');
+var uid = require('uid');
+require('date-utils');
+
+var developersModel = mongoose.model('developers');
+var attendanceModel = mongoose.model('attendance');
+
+
+var getDate = function() {
+	var date = {};
+
+	date.start = new Date();
+	date.start.setHours(0,0,0,0);
+	date.end = new Date();
+	date.end.setHours(23,59,59,999);
+
+	return date;
+}
+
+exports.getWork = function(req, res) {
+	var date = getDate();
+
+	attendanceModel.findOne({
+		devId: req.body.devId,
+		outtime: 0,
+		createdAt: { $gte: date.start, $lt: date.end },
+	}, {
+		_id: true,
+	}).exec(function(err, response) {
+		res.json(response);
+	});
+}
+
+exports.startWork = function(req, res) {
+	req.body.createdAt = new Date();
+	req.body.intime = new Date().getTime() / 1000;
+	req.body.pureDate = (new Date().getMonth()+1) +'-'+ (new Date().getFullYear());
+	req.body.outtime = 0;
+
+	var formData = new attendanceModel(req.body);
+
+	formData.save(function(err, result) {
+		res.json(result);
+	});
+}
+
+exports.stopWork = function(req, res) {
+	attendanceModel.findOne({
+		_id: req.body._id
+	},{
+		intime: true
+	}).exec(function(err, timeRes) {
+		var outtime = new Date().getTime() / 1000;
+
+		attendanceModel.update({
+			_id: req.body._id
+		},{
+			outtime: outtime,
+			worktime: (outtime - timeRes.intime),
+		}).exec(function(err, result) {
+			res.json(result);
+		});
+	});
+}
+
+exports.getWorkReport = function(req, res) {
+	attendanceModel.find({
+		devId: req.body.devId,
+		pureDate: req.body.reqDate,
+	}).lean().exec(function(err, response) {
+		if (response.length) {
+			var data = [];
+			var finalRes = [];
+
+			for (var i in response) {
+				response[i].date = new Date(response[i].createdAt).toFormat('D-M-YYYY');
+
+				if (!data[response[i].date]) {
+					data[response[i].date] = {
+						_id: response[i]._id,
+						devId: response[i].devId,
+						createdAt: response[i].createdAt,
+						intime: response[i].intime,
+						pureDate: response[i].pureDate,
+						outtime: response[i].outtime,
+						worktime: response[i].worktime,
+						date: response[i].date,
+					};
+				} else {
+					data[response[i].date].worktime += response[i].worktime;
+				}
+			}
+
+			for (var i in data) {
+				finalRes.push(data[i]);
+			}
+
+			res.json(finalRes);
+			return;
+		}
+
+		res.json(response);
+	});
+}
+
+
+// ------------------------------------------
+// Cron section
+// ------------------------------------------
+var cron = require('node-cron');
+ 
+cron.schedule('* * * * *', () => {
+	var indiaTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Kolkata"});
+	indiaTime = new Date(indiaTime);
+	var hour = indiaTime.getHours();
+
+	console.log("hour >>>>>", hour);
+
+	if ((hour >= 13 && hour <= 14) || hour >= 19) {
+		console.log('Cron start ....', new Date());
+		attendanceModel.find({
+			outtime: 0
+		},{
+			intime: true
+		}).exec(function(err, timeRes) {
+			if (!timeRes.length) {
+				console.log('no data');
+				return;
+			}
+
+			var count = 0;
+			var outtime = new Date().getTime() / 1000;
+			var update = function() {
+				if (timeRes.length > count) {
+					attendanceModel.update({
+						_id: timeRes[count]._id,
+					},{
+						outtime: outtime,
+						worktime: (outtime - timeRes[count].intime),
+					}).exec(function(err, result) {
+						count = count + 1;
+						console.log('Cron completed ....', new Date());
+					});
+				}
+			}
+			update();
+		});
+	}
+});
