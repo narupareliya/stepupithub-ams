@@ -8,7 +8,7 @@ var icdb = require('../controllers/icdb');
 
 
 // Common routes
-router.all('/api/icdb/add-data', cors(), icdb.allAddData);
+router.all('/api/icdb/add-data', cors(), icdb.postAddData);
 router.all('/api/icdb/get-data', cors(), icdb.getData);
 router.all('/api/icdb/get-condition', cors(), icdb.getCondition);
 router.all('/api/icdb/single-data', cors(), icdb.getSingle);
