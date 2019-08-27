@@ -8,8 +8,8 @@ var path = require('path'),
     mongoose = require('mongoose'),
     expressValidator = require('express-validator'),
     flash = require('connect-flash'),
+    schema = require('./app/model/model'),
     routes = require('./app/routes/routes');
-    require('./app/model/model');
 
 
 var app = module.exports = express();
@@ -41,9 +41,6 @@ app.use('/', routes);
 
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
-
-
 server.listen(process.env.PORT || 3000, function() {
 	console.log("Express server listening on port 3000");
 });

@@ -1,6 +1,3 @@
-console.log('asd');
-
-var config = require('config');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

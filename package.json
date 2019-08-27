@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stepupithub/admin-console.git"
+    "url": "git+https://github.com/stepupithub/stepupithub-ams.git"
   },
   "keywords": [
     "ExpressJS",
@@ -18,9 +18,9 @@
   "author": "Stepup It Hub",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stepupithub/admin-console/issues"
+    "url": "https://github.com/stepupithub/stepupithub-ams/issues"
   },
-  "homepage": "https://github.com/stepupithub/admin-console",
+  "homepage": "https://github.com/stepupithub/stepupithub-ams",
   "dependencies": {
     "async": "^1.5.2",
     "body-parser": "^1.17.2",

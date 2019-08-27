@@ -1,1 +1,1 @@
-web: node stage.js
+web: node index.js
