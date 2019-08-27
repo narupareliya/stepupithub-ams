@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var cors = require('cors');
 var ctrl = require('../controllers/controller');
-var icdb = require('../icdb');
+var icdb = require('../controllers/icdb');
 
 
 // Common routes
