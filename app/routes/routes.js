@@ -7,7 +7,10 @@ var ctrl = require('../controllers/controller');
 var icdb = require('../controllers/icdb');
 
 
-// Common routes
+router.get('/', function(req, res) {
+	res.json('Connected...')
+});
+
 router.all('/api/icdb/add-data', cors(), icdb.postAddData);
 router.all('/api/icdb/get-data', cors(), icdb.getData);
 router.all('/api/icdb/get-condition', cors(), icdb.getCondition);

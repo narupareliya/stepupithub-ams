@@ -27,17 +27,19 @@ exports.getData = function(req, res) {
 
 	var commonModel = getModel(req.body.model);
 
-	commonModel.find().exec(function(err, responseData) {
+	commonModel.find().exec(function(err, response) {
 		if(err) {
 			res.json({
 				status: false,
-				data: responseData
+				data: response
 			});
 			return;
 		}
 
-		res.json(responseData);
-		return;
+		res.json({
+			status: true,
+			result: response,
+		});
 	});
 };
 
@@ -49,17 +51,19 @@ exports.getCondition = function(req, res) {
 
 	var commonModel = getModel(req.body.model);
 
-	commonModel.find(req.body.condition, req.body.fileds).exec(function(err, responseData) {
+	commonModel.find(req.body.condition, req.body.fileds).exec(function(err, response) {
 		if(err) {
 			res.json({
 				status: false,
-				data: responseData
+				data: response
 			});
 			return;
 		}
 
-		res.json(responseData);
-		return;
+		res.json({
+			status: true,
+			result: response,
+		});
 	});
 };
 
@@ -111,7 +115,6 @@ exports.postAddData = function(req, res) {
 			result: result
 		});
 	});
-	return;
 }
 
 exports.getDeleteData = function(req, res) {
@@ -136,7 +139,6 @@ exports.getDeleteData = function(req, res) {
 			result: result,
 			responseIds: req.body._id
 		});
-		return;
 	});
 };
 
@@ -159,6 +161,5 @@ exports.getDeleteDataCondition = function(req, res) {
 		res.json({
 			status: true
 		});
-		return;
 	});
 };
