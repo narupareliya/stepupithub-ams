@@ -116,7 +116,7 @@ cron.schedule('* * * * *', () => {
 
 	console.log("hour >>>>>", hour);
 
-	if ((hour >= 13 && hour <= 14) || hour >= 19) {
+	if ((hour >= 13 && hour <= 14) || hour >= 20) {
 		console.log('Cron start ....', new Date());
 		attendanceModel.find({
 			outtime: 0
