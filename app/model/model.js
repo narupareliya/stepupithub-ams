@@ -46,3 +46,16 @@ var developerSchema = new Schema({
     createdAt: Date,
 });
 mongoose.model('developers', developerSchema);
+
+// ----------- Expense Manager User ---------------------------
+var expenseUser = new Schema({
+    userName: String,
+    email: String,
+    contact: String,
+    password: String,
+    gender: String,
+    createdAt: Date,
+    updatedAt: Date
+});
+
+mongoose.model('expenseUser', expenseUser);

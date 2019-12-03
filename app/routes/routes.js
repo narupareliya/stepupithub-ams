@@ -24,5 +24,8 @@ router.all('/api/v1/app/att/work/stop', cors(), ctrl.stopWork);
 router.all('/api/v1/app/att/get/work', cors(), ctrl.getWork);
 router.all('/api/v1/app/att/get/reports', cors(), ctrl.getWorkReport);
 
+//Expence Manager App Route
+router.all('/api/user/expregister', cors(), ctrl.expRegister);
+
 
 module.exports = router;
