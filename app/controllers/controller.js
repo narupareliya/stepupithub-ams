@@ -212,3 +212,18 @@ exports.expLogin = function(req, res) {
         });
     });
 }
+
+exports.setPin = function(req, res) {
+	console.log("req.body>>>>>>>>>",req.body);
+    var userModel = mongoose.model('expenseUser');
+    userModel.update({
+        _id: req.body._id
+    }, req.body, {
+        multi: true
+    }).exec(function(err, result) {
+        res.json({
+            status: true,
+            result: result
+        });
+    });
+};

@@ -27,6 +27,7 @@ router.all('/api/v1/app/att/get/reports', cors(), ctrl.getWorkReport);
 //Expence Manager App Route
 router.all('/api/user/expregister', cors(), ctrl.expRegister);
 router.all('/api/user/explogin', cors(), ctrl.expLogin);
+router.all('/api/user/setpin', cors(), ctrl.setPin);
 
 
 module.exports = router;

@@ -54,6 +54,7 @@ var expenseUser = new Schema({
     contact: String,
     password: String,
     gender: String,
+    loginpin: String,
     createdAt: Date,
     updatedAt: Date
 });
