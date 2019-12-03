@@ -151,8 +151,6 @@ cron.schedule('* * * * *', () => {
 //Expence Manager App
 
 exports.expRegister = function(req, res) {
-	console.log("Hello>>>>>>>>>>>>>>>>>>")
-
     var userModel = mongoose.model('expenseUser');
 
     userModel.find({
@@ -189,3 +187,28 @@ exports.expRegister = function(req, res) {
         });
     });
 };
+
+
+exports.expLogin = function(req, res) {
+    var userModel = mongoose.model('expenseUser');
+
+    userModel.findOne({
+        email: req.body.email,
+        password: req.body.password
+    }, function(err, user) {
+        if (err || !user) {
+            res.json({
+                msg: 'User not found',
+                status: false
+            });
+            return;
+        }
+
+        // req.session.user = user;
+
+        res.json({
+            status: true,
+            user: user,
+        });
+    });
+}
