@@ -191,30 +191,47 @@ exports.expRegister = function(req, res) {
 
 exports.expLogin = function(req, res) {
     var userModel = mongoose.model('expenseUser');
+    if(req.body.type=='Password'){
+	    userModel.findOne({
+	        email: req.body.email,
+	        password: req.body.password
+	    }, function(err, user) {
+	        if (err || !user) {
+	            res.json({
+	                msg: 'User not found',
+	                status: false
+	            });
+	            return;
+	        }
+	        // req.session.user = user;
 
-    userModel.findOne({
-        email: req.body.email,
-        password: req.body.password
-    }, function(err, user) {
-        if (err || !user) {
-            res.json({
-                msg: 'User not found',
-                status: false
-            });
-            return;
-        }
+	        res.json({
+	            status: true,
+	            user: user,
+	        });
+	    });
+	}
+	else{
+		 userModel.findOne({
+	        loginpin: req.body.loginpin,
+	    }, function(err, user) {
+	        if (err || !user) {
+	            res.json({
+	                msg: 'User not found',
+	                status: false
+	            });
+	            return;
+	        }
 
-        // req.session.user = user;
-
-        res.json({
-            status: true,
-            user: user,
-        });
-    });
+	        res.json({
+	            status: true,
+	            user: user,
+	        });
+	    });
+	}
 }
 
 exports.setPin = function(req, res) {
-	console.log("req.body>>>>>>>>>",req.body);
     var userModel = mongoose.model('expenseUser');
     userModel.update({
         _id: req.body._id
