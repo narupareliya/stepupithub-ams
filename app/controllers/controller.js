@@ -190,8 +190,6 @@ exports.expRegister = function(req, res) {
 
 
 exports.expLogin = function(req, res) {
-	console.log("req.body.type",req.body.type)
-	console.log("req.body.loginpin",req.body.loginpin)
     var userModel = mongoose.model('expenseUser');
     if(req.body.type=='Password'){
 	    userModel.findOne({
