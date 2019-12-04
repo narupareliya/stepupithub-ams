@@ -231,6 +231,7 @@ exports.expLogin = function(req, res) {
 }
 
 exports.setPin = function(req, res) {
+	console.log("req.body._id",req.body._id)
     var userModel = mongoose.model('expenseUser');
     userModel.update({
         _id: req.body._id
