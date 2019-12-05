@@ -60,3 +60,13 @@ var expenseUser = new Schema({
 });
 
 mongoose.model('expenseUser', expenseUser);
+
+
+var expenseLogs = new Schema({
+    userId: String,
+    logs: [],
+    createdAt: Date,
+    updatedAt: Date
+});
+
+mongoose.model('expenseLogs', expenseLogs);

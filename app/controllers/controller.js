@@ -148,7 +148,18 @@ cron.schedule('* * * * *', () => {
 	}
 });
 
-//Expence Manager App
+
+
+
+
+
+
+
+
+// ----------------------------------------
+// Expense manager app business logic
+// ----------------------------------------
+
 
 exports.expRegister = function(req, res) {
     var userModel = mongoose.model('expenseUser');
@@ -191,43 +202,43 @@ exports.expRegister = function(req, res) {
 
 exports.expLogin = function(req, res) {
     var userModel = mongoose.model('expenseUser');
-    if(req.body.type=='Password'){
-	    userModel.findOne({
-	        email: req.body.email,
-	        password: req.body.password
-	    }, function(err, user) {
-	        if (err || !user) {
-	            res.json({
-	                msg: 'User not found',
-	                status: false
-	            });
-	            return;
-	        }
-	        // req.session.user = user;
 
-	        res.json({
-	            status: true,
-	            user: user,
-	        });
-	    });
-	} else {
-		 userModel.findOne({
-	        loginpin: req.body.loginpin
-	    }, function(err, user) {
-	        if (err || !user) {
-	            res.json({
-	                msg: 'User not found',
-	                status: false
-	            });
-	            return;
-	        }
+    userModel.findOne({
+        email: req.body.email,
+        password: req.body.password
+    }, function(err, user) {
+        if (err || !user) {
+            res.json({
+                msg: 'User not found',
+                status: false
+            });
+            return;
+        }
 
-	        res.json({
-	            status: true,
-	            user: user,
-	        });
-	    });
-	}
+        res.json({
+            status: true,
+            user: user,
+        });
+    });
+ //    if(req.body.type=='Password'){
+	// } else {
+	// 	 userModel.findOne({
+	//         loginpin: req.body.loginpin
+	//     }, function(err, user) {
+	//         if (err || !user) {
+	//             res.json({
+	//                 msg: 'User not found',
+	//                 status: false
+	//             });
+	//             return;
+	//         }
+
+	//         res.json({
+	//             status: true,
+	//             user: user,
+	//         });
+	//     });
+	// }
 }
 
 exports.setPin = function(req, res) {
@@ -243,4 +254,29 @@ exports.setPin = function(req, res) {
             result: result
         });
     });
+};
+
+exports.postLog = function(req, res) {
+    var explogsModel = mongoose.model('expenseLogs');
+
+    explogsModel.update({
+        userId: req.body.userId
+    }, req.body, {
+        upsert: true
+    }).exec(function(err, result) {
+        res.json({
+            status: true,
+            result: result
+        });
+    });
+};
+
+exports.restoreLog = function(req, res) {
+    var explogsModel = mongoose.model('expenseLogs');
+
+    explogsModel.findOne({
+		userId: req.body.userId,
+	}).exec(function(err, response) {
+		res.json(response);
+	});
 };

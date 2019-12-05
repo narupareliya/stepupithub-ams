@@ -28,6 +28,8 @@ router.all('/api/v1/app/att/get/reports', cors(), ctrl.getWorkReport);
 router.all('/api/user/expregister', cors(), ctrl.expRegister);
 router.all('/api/user/explogin', cors(), ctrl.expLogin);
 router.all('/api/user/setpin', cors(), ctrl.setPin);
+router.all('/api/app/exp/post-log', cors(), ctrl.postLog);
+router.all('/api/app/exp/restore-log', cors(), ctrl.restoreLog);
 
 
 module.exports = router;
