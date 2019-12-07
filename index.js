@@ -14,8 +14,8 @@ var path = require('path'),
 
 var app = module.exports = express();
 
-// mongoose.connect('mongodb://nalin123:nalin123@ds051595.mlab.com:51595/heroku_31p7qr07');
-mongoose.connect('mongodb://localhost/expense-manager');
+mongoose.connect('mongodb://nalin123:nalin123@ds051595.mlab.com:51595/heroku_31p7qr07');
+// mongoose.connect('mongodb://localhost/expense-manager');
 
 
 app.use(bodyParser.urlencoded({

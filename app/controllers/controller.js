@@ -202,7 +202,8 @@ exports.expRegister = function(req, res) {
 
 exports.expLogin = function(req, res) {
     var userModel = mongoose.model('expenseUser');
-
+    console.log(req.body);
+    
     userModel.findOne({
         email: req.body.email,
         password: req.body.password
