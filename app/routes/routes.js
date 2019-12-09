@@ -26,10 +26,13 @@ router.all('/api/v1/app/att/get/reports', cors(), ctrl.getWorkReport);
 
 //Expence Manager App Route
 router.all('/api/user/expregister', cors(), ctrl.expRegister);
+router.all('/api/user/expregupdate', cors(), ctrl.expregUpdate);
 router.all('/api/user/explogin', cors(), ctrl.expLogin);
+router.all('/api/user/changepass', cors(), ctrl.changePass);
 router.all('/api/user/setpin', cors(), ctrl.setPin);
 router.all('/api/app/exp/post-log', cors(), ctrl.postLog);
 router.all('/api/app/exp/restore-log', cors(), ctrl.restoreLog);
+
 
 
 module.exports = router;
