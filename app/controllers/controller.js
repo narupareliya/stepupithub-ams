@@ -201,35 +201,34 @@ exports.expRegister = function(req, res) {
 
 exports.expregUpdate = function(req, res) {
     var userModel = mongoose.model('expenseUser');
+    // userModel.find({
+    //     email: req.body.email
+    // }).exec(function(err, result) {
 
-    userModel.find({
-        email: req.body.email
-    }).exec(function(err, result) {
+    //     if (err) {
+    //         return;
+    //     }
 
-        if (err) {
-            return;
-        }
+    //     if (result && result.length) {
+    //         res.json({
+    //             status: 1,
+    //         });
 
-        if (result && result.length) {
-            res.json({
-                status: 1,
-            });
+    //         return;
+    //     }
 
-            return;
-        }
+    //     req.body.createdAt = new Date();
+    //     var user = new userModel(req.body);
 
-        req.body.createdAt = new Date();
-        var user = new userModel(req.body);
+    //     var errors = req.validationErrors();
 
-        var errors = req.validationErrors();
-
-        if (errors) {
-            res.json({
-                status: 2,
-                errors: errors,
-            })
-            return
-        }
+    //     if (errors) {
+    //         res.json({
+    //             status: 2,
+    //             errors: errors,
+    //         })
+    //         return
+    //     }
 
         userModel.update({
         _id: req.body._id
@@ -241,7 +240,7 @@ exports.expregUpdate = function(req, res) {
 	            result: result
 	        });
 	    });
-    });
+    // });
 };
 
 exports.expLogin = function(req, res) {
@@ -286,11 +285,10 @@ exports.expLogin = function(req, res) {
 }
 
 exports.changePass = function(req, res) {
-
+	console.log("req.body",req.body)
     var userModel = mongoose.model('expenseUser');
-
     userModel.update({
-        _id: req.body._id
+        _id: req.body.userId
     }, req.body, {
         multi: true
     }).exec(function(err, result) {
