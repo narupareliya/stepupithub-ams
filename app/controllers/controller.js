@@ -263,25 +263,6 @@ exports.expLogin = function(req, res) {
             user: user,
         });
     });
- //    if(req.body.type=='Password'){
-	// } else {
-	// 	 userModel.findOne({
-	//         loginpin: req.body.loginpin
-	//     }, function(err, user) {
-	//         if (err || !user) {
-	//             res.json({
-	//                 msg: 'User not found',
-	//                 status: false
-	//             });
-	//             return;
-	//         }
-
-	//         res.json({
-	//             status: true,
-	//             user: user,
-	//         });
-	//     });
-	// }
 }
 
 exports.changePass = function(req, res) {
@@ -300,7 +281,6 @@ exports.changePass = function(req, res) {
 };
 
 exports.setPin = function(req, res) {
-	console.log("req.body._id",req.body._id)
     var userModel = mongoose.model('expenseUser');
     userModel.update({
         _id: req.body._id
@@ -338,3 +318,85 @@ exports.restoreLog = function(req, res) {
 		res.json(response);
 	});
 };
+
+
+//Girls Pose
+
+exports.girlsLike = function(req, res) {
+
+	console.log("req.body",req.body)
+    var userModel = mongoose.model(req.body.model);
+    
+    userModel.findOne({
+		image: req.body.image,
+	}).exec(function(err, result) {
+        if (err) {
+            res.json({
+                status: 0,
+            });
+            return;
+        }
+
+        if (result && result._id) {
+        	if(req.body.status == 1){
+            	pushLike();
+        	}
+        	else
+        	{
+        		unLike();
+        	}
+        }
+        else
+        {
+        	var like = new userModel(req.body);
+        	like.save(function(err, result) {
+	            res.json({
+	                status: 1,
+	                result: result
+	            });
+       		 });
+        }
+    });
+
+    var pushLike = function() {
+        userModel.update({
+            "image" : req.body.image,
+        },{
+            $push: { "likes": req.body.likes }
+        }).exec(function(err, result) {
+            console.log(err, result);
+            if (err) {
+                res.json({
+                    status: false
+                });
+                return;
+            }
+            res.json({
+                    status: true
+                });
+            return;
+        });
+    }
+
+    var unLike = function() {
+        userModel.update({
+            "image" : req.body.image,
+        },{
+            $pull: { "likes": { $in: [req.body.likes] }}
+        }).exec(function(err, result) {
+            console.log(err, result);
+            if (err) {
+                res.json({
+                    status: false
+                });
+                return;
+            }
+            res.json({
+                    status: true
+                });
+            return;
+        });
+    }
+};
+
+

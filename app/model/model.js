@@ -70,3 +70,10 @@ var expenseLogs = new Schema({
 });
 
 mongoose.model('expenseLogs', expenseLogs);
+
+var photoLikes = new Schema({
+    image: String,
+    likes: []
+});
+
+mongoose.model('photoLikes', photoLikes);
