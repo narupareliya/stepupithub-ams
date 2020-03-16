@@ -305,14 +305,20 @@ exports.restoreLog = function(req, res) {
 
 //Girls Pose
 
-exports.girlsLike = function(req, res) {
 
-	console.log("req.body",req.body)
+exports.girlsLike = function(req, res) {
     var userModel = mongoose.model(req.body.model);
+ 
+    var finalLike = {
+        deviceId: req.body.likes,
+        createdAt: new Date()
+    };
+
+    req.body.likes = finalLike;
     
     userModel.findOne({
-		image: req.body.image,
-	}).exec(function(err, result) {
+        image: req.body.image,
+    }).exec(function(err, result) {
         if (err) {
             res.json({
                 status: 0,
@@ -321,23 +327,23 @@ exports.girlsLike = function(req, res) {
         }
 
         if (result && result._id) {
-        	if(req.body.status == 1){
-            	pushLike();
-        	}
-        	else
-        	{
-        		unLike();
-        	}
+            if(req.body.status == 1){
+                pushLike();
+            }
+            else
+            {
+                unLike();
+            }
         }
         else
         {
-        	var like = new userModel(req.body);
-        	like.save(function(err, result) {
-	            res.json({
-	                status: 1,
-	                result: result
-	            });
-       		 });
+            var like = new userModel(req.body);
+            like.save(function(err, result) {
+                res.json({
+                    status: 1,
+                    result: result
+                });
+             });
         }
     });
 
@@ -365,9 +371,8 @@ exports.girlsLike = function(req, res) {
         userModel.update({
             "image" : req.body.image,
         },{
-            $pull: { "likes": { $in: [req.body.likes] }}
+            $pull: { "likes" : { deviceId: req.body.likes.deviceId }},
         }).exec(function(err, result) {
-            console.log(err, result);
             if (err) {
                 res.json({
                     status: false
@@ -381,5 +386,90 @@ exports.girlsLike = function(req, res) {
         });
     }
 };
+
+
+exports.mostLike = function(req, res) {
+    if (!req.body.model) {
+        res.json([]);
+        return;
+    }
+
+    var imgLikes = mongoose.model(req.body.model);
+    var dt = exports.getTimeStamp('lastWeek');
+    imgLikes.aggregate ([
+        { $match : {"likes.createdAt": { $gt: dt.fromDate,$lte: dt.toDate }}},
+        { $unwind : "$likes" },
+        { $match : {"likes.createdAt": { $gt: dt.fromDate,$lte: dt.toDate }}},
+        { $group: {_id: '$image',count: { $sum: 1 }}
+    }]).exec(function(err, response) {
+        
+        if(response.length) {
+            response.sort(function(a,b) {
+               return b.count - a.count;
+            });
+        }
+
+        imgLikes.aggregate ([
+            { $match : {"likes.deviceId": req.body.deviceid }
+        }]).exec(function(err, likes) {
+            var like = [];
+
+            if(likes.length) {
+                for (var i in likes) {
+                    like.push(likes[i].image);
+                }
+            }
+            var photoweek = "";
+            if(response.length) {
+                photoweek = response[0]._id+".jpg"
+            }
+
+            res.json({
+                image:photoweek,
+                likes: like,
+            });
+        });
+    });
+};
+
+
+exports.getTimeStamp = function(timespans) {
+    //
+    var fromHours = new Date();
+    var toHours = new Date();
+    var currentDate = new Date();
+
+    switch (timespans) {
+
+        case "lastWeek":
+
+            var d = new Date();
+            var to = d.setTime(d.getTime() - (d.getDay() ? d.getDay() : 7) * 24 * 60 * 60 * 1000);
+            var from = d.setTime(d.getTime() - 6 * 24 * 60 * 60 * 1000);
+
+            var firstDate = new Date(from);
+            var lastDate = new Date(to);
+            firstDate.setHours(0, 0, 0, 0);
+            lastDate.setHours(23, 59, 59, 999);
+
+            var from_day = firstDate.getDaysBetween(lastDate);
+            var to_day = lastDate.getDaysBetween(currentDate);
+            from_day += 1;
+            fromHours = fromHours.addDays(-(from_day + to_day));
+            to_day += 1
+            toHours = toHours.addDays(-to_day);
+
+            break;
+
+    }
+
+    fromHours.setHours(0, 0, 0, 0);
+    toHours.setHours(23, 59, 59, 999);
+
+    return {
+        fromDate: fromHours,
+        toDate: toHours
+    };
+}
 
 

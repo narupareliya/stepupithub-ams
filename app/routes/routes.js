@@ -37,6 +37,9 @@ router.all('/api/app/exp/restore-log', cors(), ctrl.restoreLog);
 // Girls Pose
 router.all('/api/girlsphoto/like', cors(), ctrl.girlsLike);
 
+// Girls Most Like
+router.all('/api/girlsphoto/mostlike', cors(), ctrl.mostLike);
+
 
 
 module.exports = router;

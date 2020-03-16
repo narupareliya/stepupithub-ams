@@ -71,9 +71,23 @@ var expenseLogs = new Schema({
 
 mongoose.model('expenseLogs', expenseLogs);
 
-var photoLikes = new Schema({
+var girlsphotoLikes = new Schema({
     image: String,
-    likes: []
+    likes: [{
+        deviceId: String,
+        createdAt: Date,
+    }]
 });
 
-mongoose.model('photoLikes', photoLikes);
+mongoose.model('girlsphotoLikes', girlsphotoLikes);
+
+
+var couplephotoLikes = new Schema({
+    image: String,
+    likes: [{
+        deviceId: String,
+        createdAt: Date,
+    }]
+});
+
+mongoose.model('couplephotoLikes', couplephotoLikes);
