@@ -424,6 +424,7 @@ exports.mostLike = function(req, res) {
                 photoweek = response[0]._id+".jpg"
             }
 
+            console.log("photoweek>>>>",photoweek)
             res.json({
                 image:photoweek,
                 likes: like,
