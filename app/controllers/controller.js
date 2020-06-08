@@ -397,9 +397,9 @@ exports.mostLike = function(req, res) {
     var imgLikes = mongoose.model(req.body.model);
     var dt = exports.getTimeStamp('lastWeek');
     imgLikes.aggregate ([
-        { $match : {"likes.createdAt": { $gt: dt.fromDate,$lte: dt.toDate }}},
+        // { $match : {"likes.createdAt": { $gt: dt.fromDate,$lte: dt.toDate }}},
         { $unwind : "$likes" },
-        { $match : {"likes.createdAt": { $gt: dt.fromDate,$lte: dt.toDate }}},
+        // { $match : {"likes.createdAt": { $gt: dt.fromDate,$lte: dt.toDate }}},
         { $group: {_id: '$image',count: { $sum: 1 }}
     }]).exec(function(err, response) {
         
@@ -421,10 +421,12 @@ exports.mostLike = function(req, res) {
             }
             var photoweek = "";
             if(response.length) {
-                photoweek = response[0]._id+".jpg"
+                photoweek = response[0]._id;
             }
 
-            console.log("photoweek>>>>",photoweek)
+           if(req.body.deviceid == ''){
+               like = [];
+           }
             res.json({
                 image:photoweek,
                 likes: like,
