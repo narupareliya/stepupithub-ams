@@ -34,10 +34,10 @@ router.all('/api/app/exp/post-log', cors(), ctrl.postLog);
 router.all('/api/app/exp/restore-log', cors(), ctrl.restoreLog);
 
 
-// Girls Pose
+// Girls / Couple / Attitude Pose
 router.all('/api/girlsphoto/like', cors(), ctrl.girlsLike);
 
-// Girls Most Like
+//  Girls / Couple / Attitude Most Like
 router.all('/api/girlsphoto/mostlike', cors(), ctrl.mostLike);
 
 

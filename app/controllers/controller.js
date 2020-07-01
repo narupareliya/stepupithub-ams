@@ -303,8 +303,6 @@ exports.restoreLog = function(req, res) {
 };
 
 
-//Girls Pose
-
 
 exports.girlsLike = function(req, res) {
     var userModel = mongoose.model(req.body.model);

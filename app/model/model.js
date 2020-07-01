@@ -91,3 +91,13 @@ var couplephotoLikes = new Schema({
 });
 
 mongoose.model('couplephotoLikes', couplephotoLikes);
+
+var attitudeLikes = new Schema({
+    image: String,
+    likes: [{
+        deviceId: String,
+        createdAt: Date,
+    }]
+});
+
+mongoose.model('attitudeLikes', attitudeLikes);
